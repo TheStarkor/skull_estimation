@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 
-// import "antd/dist/antd.css";
+import "antd/dist/antd.css";
 
 import Router from "./router";
 
