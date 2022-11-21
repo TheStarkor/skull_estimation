@@ -6,7 +6,7 @@ import "antd/dist/antd.css";
 import Router from "./router";
 
 function App() {
-  axios.defaults.baseURL = "http://localhost:8000";
+  axios.defaults.baseURL = "http://localhost:9090";
   // axios.interceptors.request.use((config) => {
   //   // TODO
   //   // if (process.env.REACT_APP_STAGE === 'dev') {
