@@ -24,10 +24,10 @@ class Net(nn.Module):
 
         for param in self.model1.parameters():
             param.requires_grad = False
-        
+
         for param in self.model1.parameters():
             param.requires_grad = False
-            
+
         self.classifier = nn.Sequential(
             nn.Linear(2000, 500),
             nn.ReLU(),
@@ -84,7 +84,7 @@ def transform_image(image_bytes):
     img = cv2.imread('hello.png')
     img = cv2.resize(img, dsize=(800, 800))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    
+
     # img = np.transpose(img, (2, 0, 1))
     # print(img.shape)
     img = img.astype(np.float32) / 255.0
@@ -97,7 +97,7 @@ def transform_image(image_bytes):
 
 def get_prediction(mastoid, glabella, supraorbital):
     outputs = model.forward(mastoid, glabella, supraorbital)
-    
+
     return (torch.argmax(outputs, dim=1).detach().numpy(), outputs.detach().numpy())
 
 @app.route('/')
@@ -107,29 +107,27 @@ def status():
 @app.route('/estimation', methods=["POST"])
 def estimation():
     if flask.request.method == "POST":
-        # params = flask.request.get_json()
+        params = flask.request.get_json()
 
-        # if (params['mastoid'] != ''):
-        #     res = requests.get(params['mastoid'])
-        #     mastoid = transform_image(res.content)
+        if (params['mastoid'] != ''):
+            res = requests.get(params['mastoid'])
+            mastoid = transform_image(res.content)
 
-        # if (params['glabella'] != ''):
-        #     res = requests.get(params['glabella'])
-        #     glabella = transform_image(res.content)
-            
+        if (params['glabella'] != ''):
+            res = requests.get(params['glabella'])
+            glabella = transform_image(res.content)
 
-        # if (params['supraorbital'] != ''):
-        #     res = requests.get(params['supraorbital'])
-        #     supraorbital = transform_image(res.content)
-            
-        # res = get_prediction(mastoid, glabella, supraorbital)
-        # print(res[0][0])
-        # print(res[1][0][0], res[1][0][1])
+
+        if (params['supraorbital'] != ''):
+            res = requests.get(params['supraorbital'])
+            supraorbital = transform_image(res.content)
+
+        res = get_prediction(mastoid, glabella, supraorbital)
 
         return flask.jsonify({
-            'gender': str(0),
-            'score_0': str(-1.4),
-            'score_1': str(1.2)
+            'gender': res[0][0],
+            'score_0': res[1][0][0],
+            'score_1': res[1][0][1]
         })
 
 
