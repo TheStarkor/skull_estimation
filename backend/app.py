@@ -73,6 +73,7 @@ model = mySequential(collections.OrderedDict([
 ]))
 
 print('Loading...')
+# TODO: pth 파일 저장 후 불러오기
 model.load_state_dict(torch.load('./SGI_demo.pth', map_location='cpu'))
 print('Loaded!')
 model.eval()
