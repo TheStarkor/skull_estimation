@@ -73,6 +73,7 @@ model = mySequential(collections.OrderedDict([
 ]))
 
 print('Loading...')
+# TODO: pth 맞춰서 변경
 model.load_state_dict(torch.load('./skully.pth', map_location='cpu'))
 print('Loaded!')
 model.eval()
