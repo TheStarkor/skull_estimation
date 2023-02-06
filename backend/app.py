@@ -53,7 +53,7 @@ class mySequential(nn.Sequential):
         return inputs
 
 modelset = [
-    ('efficientNet-b7', [torchvision.models.efficientnet_b7(pretrained=True), torchvision.models.efficientnet_b7(pretrained=True), torchvision.models.efficientnet_b7(pretrained=True)]),
+    ('googlenet', [torchvision.models.googlenet(pretrained=True), torchvision.models.googlenet(pretrained=True), torchvision.models.googlenet(pretrained=True)]),
 ]
 
 models = modelset[0][1]
@@ -73,8 +73,7 @@ model = mySequential(collections.OrderedDict([
 ]))
 
 print('Loading...')
-# TODO: pth 파일 저장 후 불러오기
-model.load_state_dict(torch.load('./SGI_demo.pth', map_location='cpu'))
+model.load_state_dict(torch.load('./skully.pth', map_location='cpu'))
 print('Loaded!')
 model.eval()
 
@@ -126,9 +125,9 @@ def estimation():
         res = get_prediction(mastoid, glabella, supraorbital)
 
         return flask.jsonify({
-            'gender': res[0][0],
-            'score_0': res[1][0][0],
-            'score_1': res[1][0][1]
+            'gender': int(res[0][0]),
+            'score_0': float(res[1][0][0]),
+            'score_1': float(res[1][0][1])
         })
 
 
