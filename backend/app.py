@@ -74,7 +74,7 @@ model = mySequential(collections.OrderedDict([
 
 print('Loading...')
 # TODO: pth 맞춰서 변경
-model.load_state_dict(torch.load('./skully.pth', map_location='cpu'))
+# model.load_state_dict(torch.load('./skully.pth', map_location='cpu'))
 print('Loaded!')
 model.eval()
 
@@ -105,23 +105,25 @@ def get_prediction(mastoid, glabella, supraorbital):
 def status():
     return 'OK'
 
+# 참고하세요~!!
+@app.route('/test', methods=['POST'])
+def test():
+    mastoid = flask.request.files['mastoid'].read()
+    print(mastoid)
+    mastoid = transform_image(mastoid)
+    print(mastoid)
+    return flask.jsonify({
+        'gender': 1,
+        'score_0': 0.1,
+        'score_1': 0.5
+    })
+
 @app.route('/estimation', methods=["POST"])
 def estimation():
-    if flask.request.method == "POST":
-        params = flask.request.get_json()
-
-        if (params['mastoid'] != ''):
-            res = requests.get(params['mastoid'])
-            mastoid = transform_image(res.content)
-
-        if (params['glabella'] != ''):
-            res = requests.get(params['glabella'])
-            glabella = transform_image(res.content)
-
-
-        if (params['supraorbital'] != ''):
-            res = requests.get(params['supraorbital'])
-            supraorbital = transform_image(res.content)
+    if flask.request.method == "POST":        
+        mastoid = transform_image(flask.request.files['mastoid'].read())
+        glabella = transform_image(flask.request.files['glabella'].read())
+        supraorbital = transform_image(flask.request.files['supraorbital'].read())
 
         res = get_prediction(mastoid, glabella, supraorbital)
 
